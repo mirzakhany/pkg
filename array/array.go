@@ -19,12 +19,12 @@ func FillStringArray(param string, l int) []string {
 	return fArray
 }
 
-// SplitStringSlice split a string array to smaller chunk
-func SplitStringSlice(buf []string, chunkSize int) [][]string {
+// ChunkString split a string array to smaller chunk
+func ChunkString(buf []string, size int) [][]string {
 	var chunk []string
-	chunks := make([][]string, 0, len(buf)/chunkSize+1)
-	for len(buf) >= chunkSize {
-		chunk, buf = buf[:chunkSize], buf[chunkSize:]
+	chunks := make([][]string, 0, len(buf)/size+1)
+	for len(buf) >= size {
+		chunk, buf = buf[:size], buf[size:]
 		chunks = append(chunks, chunk)
 	}
 	if len(buf) > 0 {
