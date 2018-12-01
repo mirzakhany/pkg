@@ -69,7 +69,7 @@ type ForeignKey struct {
 }
 
 // InitDatabase for initialize database
-func InitDatabase(settings *DBSettings) error {
+func InitDatabase(settings *DBSettings) (*gorm.DB, error) {
 	logger.LogAccess.Debugf("Init Database Engine as %s", settings.Engine)
 	var err error
 	switch settings.Engine {
@@ -81,12 +81,12 @@ func InitDatabase(settings *DBSettings) error {
 		DB, err = InitMySQLDB(settings.MaxTry, settings.MySQL)
 	default:
 		logger.LogError.Error("database error: can't find database driver")
-		return errors.New("can't find database driver")
+		return nil, errors.New("can't find database driver")
 	}
 
 	initSchema(DB, settings)
 
-	return err
+	return DB, err
 }
 
 func initSchema(db *gorm.DB, settings *DBSettings) {
