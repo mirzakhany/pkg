@@ -64,8 +64,8 @@ type ForeignKey struct {
 	Model       interface{}
 	Field       string
 	Destination string
-	onDelete    string
-	onUpdate    string
+	OnDelete    string
+	OnUpdate    string
 }
 
 // InitDatabase for initialize database
