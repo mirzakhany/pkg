@@ -70,17 +70,17 @@ type ForeignKey struct {
 
 // InitDatabase for initialize database
 func InitDatabase(settings *DBSettings) (*gorm.DB, error) {
-	logger.LogAccess.Debugf("Init Database Engine as %s", settings.Engine)
+	logger.LogAccess.Infof("Init Database Engine as %s", settings.Engine)
 	var err error
 	switch settings.Engine {
 	case "postgres":
 		DB, err = InitPostgres(settings.MaxTry, settings.Postgres)
 	case "sqlite":
-		DB, err = InitSqlite(settings.MaxTry, settings.SQLite)
+		DB, err = InitSQLite(settings.MaxTry, settings.SQLite)
 	case "mysql":
 		DB, err = InitMySQLDB(settings.MaxTry, settings.MySQL)
 	default:
-		logger.LogError.Error("database error: can't find database driver")
+		logger.Error("database error: can't find database driver")
 		return nil, errors.New("can't find database driver")
 	}
 
@@ -96,13 +96,13 @@ func initSchema(db *gorm.DB, settings *DBSettings) {
 			settings.DBModels...,
 		)
 		if err != nil {
-			logger.LogError.Fatalf("auto migration failed, %v", err)
+			logger.Fatalf("auto migration failed, %v", err)
 			return errors.New("auto migration failed")
 		}
 
 		for _, fk := range settings.ForeignKeys {
-			if err := tx.Model(fk.Model).AddForeignKey(fk.Field, fk.Destination, fk.onDelete, fk.onUpdate).Error; err != nil {
-				logger.LogError.Fatalf("add foreign-key failed, %v", err)
+			if err := tx.Model(fk.Model).AddForeignKey(fk.Field, fk.Destination, fk.OnDelete, fk.OnUpdate).Error; err != nil {
+				logger.Fatalf("add foreign-key failed, %v", err)
 				return err
 			}
 		}
@@ -114,6 +114,6 @@ func initSchema(db *gorm.DB, settings *DBSettings) {
 func CloseDatabase() {
 	err := DB.Close()
 	if err != nil {
-		logger.LogError.Errorf("database error: can't close database, %v", err)
+		logger.Errorf("database error: can't close database, %v", err)
 	}
 }

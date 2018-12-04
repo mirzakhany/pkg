@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/getsentry/raven-go"
 	"github.com/gin-gonic/gin"
 	"github.com/mattn/go-isatty"
 	"github.com/sirupsen/logrus"
@@ -24,6 +25,9 @@ var (
 	LogAccess *logrus.Logger
 	// LogError is log server error log
 	LogError *logrus.Logger
+
+	// LogToSentry flag to send errors to sentry or not
+	LogToSentry bool
 
 	isTerm bool
 
@@ -50,6 +54,8 @@ type LogSettings struct {
 	ErrorLevel string
 	// ErrorLog output of error log
 	ErrorLog string
+	// SentryDNS url of sentry
+	SentryDNS string
 }
 
 func init() {
@@ -58,10 +64,15 @@ func init() {
 
 // InitLog use for initial log module
 func InitLog(logSettings LogSettings) error {
-
 	var err error
-
 	settings = logSettings
+	if settings.SentryDNS != "" {
+		err := raven.SetDSN(settings.SentryDNS)
+		if err != nil {
+			return err
+		}
+		LogToSentry = true
+	}
 
 	// init logger
 	LogAccess = logrus.New()

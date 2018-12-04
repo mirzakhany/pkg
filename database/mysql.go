@@ -40,13 +40,13 @@ func InitMySQLDB(maxTry int, settings MySQLSettings) (*gorm.DB, error) {
 		if err == nil {
 			break
 		}
-		logger.LogError.Errorf("Connect to MySql failed du error: %v", err)
+		logger.Errorf("Connect to MySql failed du error: %v - retrying ...", err)
 		if maxTry > 0 {
 			maxTry--
 		} else {
 			return nil, err
 		}
 	}
-	logger.LogAccess.Info("Connection to MySql stabilised")
+	logger.Info("Connection to MySql stabilised")
 	return database, err
 }

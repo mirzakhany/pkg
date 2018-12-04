@@ -7,7 +7,7 @@ import (
 )
 
 // InitSQLite init SQLite
-func InitSqlite(maxTry int, settings SQLiteSettings) (*gorm.DB, error) {
+func InitSQLite(maxTry int, settings SQLiteSettings) (*gorm.DB, error) {
 
 	var err error
 	var db *gorm.DB
@@ -16,13 +16,13 @@ func InitSqlite(maxTry int, settings SQLiteSettings) (*gorm.DB, error) {
 		if err == nil {
 			break
 		}
-		logger.LogError.Errorf("Connect to SQLite failed du error: %v", err)
+		logger.Errorf("Connect to SQLite failed du error: %v - retrying ...", err)
 		if maxTry > 0 {
 			maxTry--
 		} else {
 			return nil, err
 		}
 	}
-	logger.LogAccess.Info("Connection to SQLite stabilised")
+	logger.Info("Connection to SQLite stabilised")
 	return db, err
 }
