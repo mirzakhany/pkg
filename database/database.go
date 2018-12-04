@@ -92,6 +92,7 @@ func InitDatabase(settings *DBSettings) (*gorm.DB, error) {
 func initSchema(db *gorm.DB, settings *DBSettings) {
 	m := gormigrate.New(db, gormigrate.DefaultOptions, settings.DBMigrations)
 	m.InitSchema(func(tx *gorm.DB) error {
+		//for _,model := range settings.DBModels{
 		err := tx.AutoMigrate(
 			settings.DBModels...,
 		)
@@ -99,6 +100,7 @@ func initSchema(db *gorm.DB, settings *DBSettings) {
 			logger.Fatalf("auto migration failed, %v", err)
 			return errors.New("auto migration failed")
 		}
+		//}
 
 		for _, fk := range settings.ForeignKeys {
 			if err := tx.Model(fk.Model).AddForeignKey(fk.Field, fk.Destination, fk.OnDelete, fk.OnUpdate).Error; err != nil {
@@ -108,6 +110,7 @@ func initSchema(db *gorm.DB, settings *DBSettings) {
 		}
 		return nil
 	})
+	m.Migrate()
 }
 
 // CloseDatabase close database session

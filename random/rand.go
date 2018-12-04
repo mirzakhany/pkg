@@ -8,17 +8,22 @@ import (
 	"time"
 )
 
-// ID random generator channel
-var ID = make(chan string)
+// id random generator channel
+var id = make(chan string, 10)
 
-func init() {
+// InitRandGenerator init the random generator
+func InitRandGenerator() {
 	rand.Seed(int64(time.Now().Nanosecond()))
 	go func() {
 		h := sha1.New()
 		c := []byte(time.Now().String())
 		for {
 			_, _ = h.Write(c)
-			ID <- fmt.Sprintf("%x", h.Sum(nil))
+			id <- fmt.Sprintf("%x", h.Sum(nil))
 		}
 	}()
+}
+// GetRandID read a random string random package
+func GetRandID() string {
+	return <-id
 }
