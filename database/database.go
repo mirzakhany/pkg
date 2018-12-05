@@ -84,24 +84,22 @@ func InitDatabase(settings *DBSettings) (*gorm.DB, error) {
 		return nil, errors.New("can't find database driver")
 	}
 
-	initSchema(DB, settings)
-
+	err =  initSchema(DB, settings)
 	return DB, err
 }
 
-func initSchema(db *gorm.DB, settings *DBSettings) {
+func initSchema(db *gorm.DB, settings *DBSettings) error{
 	m := gormigrate.New(db, gormigrate.DefaultOptions, settings.DBMigrations)
 	m.InitSchema(func(tx *gorm.DB) error {
-		//for _,model := range settings.DBModels{
-		err := tx.AutoMigrate(
-			settings.DBModels...,
-		)
-		if err != nil {
-			logger.Fatalf("auto migration failed, %v", err)
-			return errors.New("auto migration failed")
+		if len(settings.DBModels) > 0 {
+			err := tx.AutoMigrate(
+				settings.DBModels...,
+			).Error
+			if err != nil {
+				logger.Fatalf("auto migration failed, %s", err)
+				return errors.New("auto migration failed")
+			}
 		}
-		//}
-
 		for _, fk := range settings.ForeignKeys {
 			if err := tx.Model(fk.Model).AddForeignKey(fk.Field, fk.Destination, fk.OnDelete, fk.OnUpdate).Error; err != nil {
 				logger.Fatalf("add foreign-key failed, %v", err)
@@ -110,7 +108,8 @@ func initSchema(db *gorm.DB, settings *DBSettings) {
 		}
 		return nil
 	})
-	m.Migrate()
+	err := m.Migrate()
+	return err
 }
 
 // CloseDatabase close database session
