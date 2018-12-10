@@ -7,14 +7,14 @@ import (
 
 	"github.com/go-redis/redis"
 	"github.com/mirzakhany/pkg/logger"
-	"github.com/mirzakhany/pkg/status"
+	"github.com/mirzakhany/pkg/status/storage"
 )
 
 //
 var redisClient *redis.Client
 
 // New func implements the storage interface
-func New(config status.ConfStatus) *KVStorage {
+func New(config storage.ConfStatus) *KVStorage {
 	return &KVStorage{
 		config: config,
 	}
@@ -33,7 +33,7 @@ func getString(key string, value *string) (err error) {
 
 // KVStorage is interface structure
 type KVStorage struct {
-	config status.ConfStatus
+	config storage.ConfStatus
 }
 
 // Init client storage.

@@ -1,4 +1,4 @@
-package status
+package storage
 
 import "time"
 

@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/asdine/storm"
-	"github.com/mirzakhany/pkg/status"
+	"github.com/mirzakhany/pkg/status/storage"
 )
 
 // New func implements the storage interface for status
-func New(config status.ConfStatus) *KVStorage {
+func New(config storage.ConfStatus) *KVStorage {
 	return &KVStorage{
 		config: config,
 	}
@@ -18,7 +18,7 @@ func New(config status.ConfStatus) *KVStorage {
 
 // KVStorage is interface structure
 type KVStorage struct {
-	config status.ConfStatus
+	config storage.ConfStatus
 }
 
 // Init client storage.

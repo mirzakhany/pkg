@@ -10,10 +10,11 @@ import (
 	"github.com/mirzakhany/pkg/status/leveldb"
 	"github.com/mirzakhany/pkg/status/boltdb"
 	"github.com/mirzakhany/pkg/status/redis"
+	"github.com/mirzakhany/pkg/status/storage"
 )
 
 // StatStorage implements the storage interface
-var StatStorage KVStorage
+var StatStorage storage.KVStorage
 
 // Stats provide response time, status code count, etc.
 var Stats = stats.New()
@@ -24,7 +25,7 @@ type AppStatus struct {
 }
 
 // InitAppStatus for initialize app status
-func InitAppStatus(settings ConfStatus) error {
+func InitAppStatus(settings storage.ConfStatus) error {
 	logger.Infof("Init App Status Engine as %s", settings.Engine)
 	switch settings.Engine {
 	case "redis":
