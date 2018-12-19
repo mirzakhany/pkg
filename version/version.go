@@ -3,39 +3,34 @@ package version
 import (
 	"fmt"
 	"runtime"
-
 	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	copyRightYear string
-	hash          string
-	short         string
-	date          string
-	count         string
-	build         string
-	version       string
-	serviceName   string
-	companyName   string
-)
-
-// SetupVersion for setup version string.
-func SetupVersion(ver string, srvName string, cmpName string, year string) {
-
-	if ver != "" {
-		version = ver
-	}
-
-	serviceName = srvName
-	companyName = cmpName
-	copyRightYear = year
+// Settings version settings
+type Settings struct {
+	CopyRightYear string
+	LongHash      string
+	ShortHash     string
+	CommitDate    string
+	CommitCount   string
+	BuildDate     string
+	Version       string
+	ServiceName   string
+	CompanyName   string
 }
 
-// GetVersion for get current version.
+var versionSettings Settings
+
+// SetupVersion for setup version string.
+func SetupVersion(settings Settings) {
+	versionSettings = settings
+}
+
+// GetVersion return version
 func GetVersion() string {
-	return version
+	return versionSettings.Version
 }
 
 func drawLine(w int) {
@@ -49,17 +44,17 @@ func drawLine(w int) {
 func PrintServiceVersion() {
 	drawLine(70)
 	fmt.Printf(`Version %s, Compiler: %s %s, Copyright (C) %s %s, Inc.`,
-		version,
+		versionSettings.Version,
 		runtime.Compiler,
 		runtime.Version(),
-		copyRightYear,
-		companyName)
+		versionSettings.CopyRightYear,
+		versionSettings.CompanyName)
 	fmt.Println()
-	fmt.Println("Commit Hash:", hash)
-	fmt.Println("Commit ShortHash:", short)
-	fmt.Println("Commit Count:", count)
-	fmt.Println("Commit Date:", date)
-	fmt.Println("Build Date:", build)
+	fmt.Println("Commit Hash:", versionSettings.LongHash)
+	fmt.Println("Commit ShortHash:", versionSettings.ShortHash)
+	fmt.Println("Commit Count:", versionSettings.CommitCount)
+	fmt.Println("Commit Date:", versionSettings.CommitDate)
+	fmt.Println("Build Date:", versionSettings.BuildDate)
 	drawLine(70)
 }
 
@@ -67,8 +62,8 @@ func PrintServiceVersion() {
 func HeaderVersionMiddleware() gin.HandlerFunc {
 	// Set out header value for each response
 	return func(c *gin.Context) {
-		k := fmt.Sprintf("X-%s-VERSION", strings.ToUpper(serviceName))
-		c.Header(k, version)
+		k := fmt.Sprintf("X-%s-VERSION", strings.ToUpper(versionSettings.ServiceName))
+		c.Header(k, versionSettings.Version)
 		c.Next()
 	}
 }
