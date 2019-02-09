@@ -26,12 +26,7 @@ var versionSettings Settings
 
 // SetupVersion for setup version string.
 func SetupVersion(settings *Settings) {
-	versionSettings.Version = settings.Version
-	versionSettings.LongHash = settings.LongHash
-	versionSettings.ShortHash = settings.ShortHash
-	versionSettings.CommitCount = settings.CommitCount
-	versionSettings.CommitDate = settings.CommitDate
-	versionSettings.BuildDate = settings.BuildDate
+	versionSettings = *settings
 }
 
 func drawLine(w int) {
