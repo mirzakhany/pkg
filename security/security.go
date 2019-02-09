@@ -3,8 +3,8 @@ package security
 import "golang.org/x/crypto/bcrypt"
 
 // HashPassword hash the password
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+func HashPassword(password string, cost int) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), cost)
 	return string(bytes), err
 }
 
