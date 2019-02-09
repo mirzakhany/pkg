@@ -1,8 +1,8 @@
 package stringsutils
 
 import (
-	"strings"
 	"encoding/json"
+	"strings"
 )
 
 // ReplaceMsg replace a set of placeholders with values

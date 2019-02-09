@@ -23,6 +23,7 @@ func InitRandGenerator() {
 		}
 	}()
 }
+
 // GetRandID read a random string random package
 func GetRandID() string {
 	return <-id

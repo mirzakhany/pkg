@@ -5,12 +5,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/thoas/stats"
 	"github.com/mirzakhany/pkg/logger"
-	"github.com/mirzakhany/pkg/status/leveldb"
 	"github.com/mirzakhany/pkg/status/boltdb"
+	"github.com/mirzakhany/pkg/status/leveldb"
 	"github.com/mirzakhany/pkg/status/redis"
 	"github.com/mirzakhany/pkg/status/storage"
+	"github.com/thoas/stats"
 )
 
 // StatStorage implements the storage interface
@@ -21,7 +21,7 @@ var Stats = stats.New()
 
 // AppStatus is app status structure
 type AppStatus struct {
-	Version    string     `json:"version"`
+	Version string `json:"version"`
 }
 
 // InitAppStatus for initialize app status

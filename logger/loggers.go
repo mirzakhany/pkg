@@ -15,7 +15,7 @@ func addStack(msg string) string {
 func Debugf(format string, args ...interface{}) {
 	msg := fmt.Sprintf(format, args...)
 	if LogToSentry {
-		raven.CaptureMessage(addStack(msg),nil)
+		raven.CaptureMessage(addStack(msg), nil)
 	}
 	LogAccess.Debug(msg)
 }

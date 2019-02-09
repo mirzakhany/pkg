@@ -84,11 +84,11 @@ func InitDatabase(settings *DBSettings) (*gorm.DB, error) {
 		return nil, errors.New("can't find database driver")
 	}
 
-	err =  initSchema(DB, settings)
+	err = initSchema(DB, settings)
 	return DB, err
 }
 
-func initSchema(db *gorm.DB, settings *DBSettings) error{
+func initSchema(db *gorm.DB, settings *DBSettings) error {
 	m := gormigrate.New(db, gormigrate.DefaultOptions, settings.DBMigrations)
 	m.InitSchema(func(tx *gorm.DB) error {
 		if len(settings.DBModels) > 0 {

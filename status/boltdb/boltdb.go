@@ -128,7 +128,7 @@ func (s *KVStorage) GetString(key string) (string, error) {
 func (s *KVStorage) RemoveKeys(keys ...string) error {
 	for _, key := range keys {
 		err := s.delBoltDB(key)
-		if err!= nil{
+		if err != nil {
 			return err
 		}
 	}
