@@ -25,7 +25,7 @@ type Settings struct {
 var versionSettings Settings
 
 // SetupVersion for setup version string.
-func SetupVersion(settings Settings) {
+func SetupVersion(settings *Settings) {
 	versionSettings.Version = settings.Version
 	versionSettings.LongHash = settings.LongHash
 	versionSettings.ShortHash = settings.ShortHash
