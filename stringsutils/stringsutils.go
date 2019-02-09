@@ -21,3 +21,15 @@ func StringifyJson(data interface{}) (string, error) {
 	}
 	return string(bytes), nil
 }
+
+// MaxLen return max len of a string array
+func MaxLen(in []string) int {
+	maxLen := 1
+	for _, i := range in {
+		li := len(i)
+		if li > maxLen {
+			maxLen = li
+		}
+	}
+	return maxLen
+}

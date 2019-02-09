@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mirzakhany/pkg/stringsutils"
 )
 
 // Settings version settings
@@ -25,7 +26,19 @@ var versionSettings Settings
 
 // SetupVersion for setup version string.
 func SetupVersion(settings Settings) {
-	versionSettings = settings
+	versionSettings.Version = settings.Version
+	versionSettings.LongHash = settings.LongHash
+	versionSettings.ShortHash = settings.ShortHash
+	versionSettings.CommitCount = settings.CommitCount
+	versionSettings.CommitDate = settings.CommitDate
+	versionSettings.BuildDate = settings.BuildDate
+}
+
+func drawLine(w int) {
+	for i := 0; i <= w; i++ {
+		fmt.Print("=")
+	}
+	fmt.Println()
 }
 
 // GetVersion return version
@@ -33,29 +46,31 @@ func GetVersion() string {
 	return versionSettings.Version
 }
 
-func drawLine(w int) {
-	for i := 0; i < w; i++ {
-		fmt.Print("=")
-	}
-	fmt.Println()
-}
-
 // PrintServiceVersion provide print server engine
 func PrintServiceVersion() {
-	drawLine(70)
-	fmt.Printf(`Version %s, Compiler: %s %s, Copyright (C) %s %s, Inc.`,
+
+	var lines []string
+	var linesLen int
+
+	lines = append(lines, fmt.Sprintf(`Version %s, Compiler: %s %s, Copyright (C) %s %s, Inc.`,
 		versionSettings.Version,
 		runtime.Compiler,
 		runtime.Version(),
 		versionSettings.CopyRightYear,
-		versionSettings.CompanyName)
-	fmt.Println()
-	fmt.Println("Commit Hash:", versionSettings.LongHash)
-	fmt.Println("Commit ShortHash:", versionSettings.ShortHash)
-	fmt.Println("Commit Count:", versionSettings.CommitCount)
-	fmt.Println("Commit Date:", versionSettings.CommitDate)
-	fmt.Println("Build Date:", versionSettings.BuildDate)
-	drawLine(70)
+		versionSettings.CompanyName))
+
+	lines = append(lines, "Commit Hash: "+versionSettings.LongHash)
+	lines = append(lines, "Commit ShortHash:"+versionSettings.ShortHash)
+	lines = append(lines, "Commit Count:"+versionSettings.CommitCount)
+	lines = append(lines, "Commit Date:"+versionSettings.CommitDate)
+	lines = append(lines, "Build Date:"+versionSettings.BuildDate)
+	linesLen = stringsutils.MaxLen(lines)
+
+	drawLine(linesLen)
+	for _, sl := range lines {
+		fmt.Println(sl)
+	}
+	drawLine(linesLen)
 }
 
 // HeaderVersionMiddleware : add version on header.
